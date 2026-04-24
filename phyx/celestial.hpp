@@ -4,7 +4,7 @@ namespace nova::phy
 {
 class CelestialWorld
 {
-    friend struct BodyToken<CelestialWorld>;
+    friend class BodyToken<CelestialWorld>;
 
 public:
     std::vector<Real> mass;
