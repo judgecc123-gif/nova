@@ -1,0 +1,44 @@
+---
+# 基础风格基于 Google 风格，但做了嵌入式微调
+BasedOnStyle: Google
+
+# 缩进宽度 (STM32 常规使用 2 或 4，建议 4)
+IndentWidth: 4
+
+# 使用空格代替 Tab
+UseTab: Never
+
+# 每行最大长度（防止代码过长，建议 100 或 120）
+ColumnLimit: 100
+
+# 允许短的 if 语句写在同一行 (例如: if (a) return;)
+AllowShortIfStatementsOnASingleLine: true
+
+# 指针对齐方式 (靠近类型: int* p; 靠近变量: int *p;)
+# 嵌入式 C 习惯靠近变量，C++ 习惯靠近类型。这里建议右侧对齐：
+PointerAlignment: Right
+
+# 访问限定符（public/private）的缩进
+AccessModifierOffset: -4
+
+# 括号换行策略
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: false
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeElse: false
+  IndentBraces: false
+
+# 连续宏定义的对齐
+AlignConsecutiveMacros: true
+
+# 连续赋值符号的对齐
+AlignConsecutiveAssignments: true
+
+# 排序 Include 头文件（按字母排序，如果不喜欢可以关掉）
+SortIncludes: true
