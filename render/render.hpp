@@ -8,6 +8,8 @@
 #include <dwrite.h>
 #include <winrt/base.h>
 
+#undef DispatchMessage
+
 #include <memory>
 #include <print>
 #include <stdexcept>
@@ -281,11 +283,11 @@ public:
     {
         uint32_t msg = static_cast<uint32_t>(id >> 32);
         uint32_t uid = static_cast<uint32_t>(id);
+
         if (callbacks.contains(msg)) {
             for (auto it = callbacks[msg].begin(); it != callbacks[msg].end(); ++it) {
-                if (it->id == uid) {
-                    *it = std::move(callbacks[msg].back());
-                    callbacks[msg].pop_back();
+                if (OriginalId(it->id) == uid) {
+                    it->id |= 1u << 31;
                     return;
                 }
             }
@@ -297,11 +299,35 @@ public:
 
     Vector2i GetSize() const;
 
+    void ClearInvalidCallbacks()
+    {
+        for (auto it = callbacks.begin(); it != callbacks.end();) {
+            for (auto it2 = it->second.begin(); it2 != it->second.end();) {
+                if (!IsValidCallback(it2->id)) {
+                    it2 = it->second.erase(it2);
+                } else {
+                    ++it2;
+                }
+            }
+            if (it->second.empty()) {
+                it = callbacks.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+
 private:
+    static uint32_t OriginalId(uint32_t id) noexcept { return id & ((~uint32_t(0)) >> 1); }
+
+    static bool IsValidCallback(uint32_t id) noexcept { return !(id & (1u << 31)); }
+
+    void DispatchMessage(uint32_t msg, WPARAM wParam, LPARAM lParam);
+
     struct CallbackData
     {
         std::unique_ptr<Callback> callback;
-        uint32_t id;
+        uint32_t id;  // 最高位为0，表示有效，为1表示无效
     };
 
     std::unordered_map<uint32_t, std::vector<CallbackData>> callbacks;  // 消息回调列表

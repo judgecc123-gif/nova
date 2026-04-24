@@ -23,11 +23,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         app = reinterpret_cast<Window *>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
     }
 
-    if (app && app->callbacks.contains(msg)) {
-        for (auto &[func, id] : app->callbacks.at(msg)) {
-            func->OnMessage(*app, wParam, lParam);
-        }
-    }
+    if (app) app->DispatchMessage(msg, wParam, lParam);
 
     if (msg == WM_DESTROY) {
         if (app) {
@@ -68,9 +64,7 @@ Window::~Window()
     if (hwnd) {
         SetWindowLongPtrW(hwnd, GWLP_USERDATA, 0);
 
-        if (callbacks.contains(WM_DESTROY)) {
-            for (auto &[func, id] : callbacks.at(WM_DESTROY)) func->OnMessage(*this, 0, 0);
-        }
+        this->DispatchMessage(WM_DESTROY, 0, 0);
         callbacks.clear();
 
         DestroyWindow(hwnd);
@@ -90,6 +84,15 @@ Vector2i Window::GetSize() const
     RECT rc;
     GetClientRect(hwnd, &rc);
     return {rc.right - rc.left, rc.bottom - rc.top};
+}
+
+void Window::DispatchMessage(uint32_t msg, WPARAM wParam, LPARAM lParam)
+{
+    if (callbacks.contains(msg)) {
+        for (auto &[func, id] : callbacks.at(msg)) {
+            if (IsValidCallback(id)) func->OnMessage(*this, wParam, lParam);
+        }
+    }
 }
 
 void Window::ProcessMessage()
