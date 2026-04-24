@@ -92,12 +92,12 @@ Vector2i Window::GetSize() const
     return {rc.right - rc.left, rc.bottom - rc.top};
 }
 
-void WindowManager::ProcessMessage()
+void Window::ProcessMessage()
 {
     MSG msg;
     while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE)) {
         if (msg.message == WM_QUIT) return;
-        // +TranslateMessage(&msg);
+        TranslateMessage(&msg);
         DispatchMessageW(&msg);
     }
 }

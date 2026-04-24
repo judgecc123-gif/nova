@@ -208,6 +208,8 @@ class Window final
     friend LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 public:
+    static void ProcessMessage();
+
     class Callback
     {
     public:
@@ -303,15 +305,6 @@ private:
     std::unordered_map<uint32_t, std::vector<CallbackData>> callbacks;  // 消息回调列表
     HWND hwnd{};
     uint32_t next_callback_id_{};
-};
-
-class WindowManager : public Singleton<WindowManager>
-{
-    friend class Singleton<WindowManager>;
-    WindowManager() = default;
-
-public:
-    void ProcessMessage();
 };
 
 }  // namespace nova::rnd
