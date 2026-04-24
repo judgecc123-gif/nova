@@ -223,6 +223,8 @@ public:
         {
         public:
             virtual void OnMessage(Window &window, WPARAM wParam, LPARAM lParam) = 0;
+
+            virtual ~DetailBase() = default;
         };
         std::unique_ptr<DetailBase> p;
 
