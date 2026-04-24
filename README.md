@@ -186,8 +186,6 @@ int main()
             renderer.EndDraw();
         }
 
-        // WindowManager::instance().Quit();
-
     } catch (const std::exception &e) {
         std::println("Error: {}", e.what());
     }
