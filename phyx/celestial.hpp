@@ -4,6 +4,8 @@ namespace nova::phy
 {
 class CelestialWorld
 {
+    friend struct BodyToken<CelestialWorld>;
+
 public:
     std::vector<Real> mass;
     std::vector<Vector2r> position, velocity, force;

@@ -8,7 +8,8 @@ namespace nova::phy
 {
 class GravityWorld
 {
-private:
+    friend class BodyToken<GravityWorld>;
+
     struct CollisionResult
     {
         Vector2r normal;  // from body i to j

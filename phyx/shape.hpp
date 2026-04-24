@@ -15,8 +15,13 @@ namespace phy
 struct Circle
 {
     Real radius;
-    Real area() const { return pi * radius * radius; }
-    Real inertia() const { return 0.5f * pi * radius * radius * radius * radius; }
+    constexpr Circle(Real radius) noexcept : radius(radius) {}
+
+    constexpr Real area() const noexcept { return pi * radius * radius; }
+    constexpr Real inertia() const noexcept
+    {
+        return 0.5f * pi * radius * radius * radius * radius;
+    }
 };
 
 struct Convex

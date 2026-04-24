@@ -275,7 +275,7 @@ void GravityWorld::Step(Real dt)
     for (auto i = 0uz; i < mass.size(); ++i) {
         if (mass[i] <= 0) continue;
 
-        velocity[i] += (force[i] / mass[i]) * dt;
+        velocity[i] += ((force[i] / mass[i]) + gravity) * dt;
         angular_velocity[i] += (torque[i] / inertia[i]) * dt;
 
         force[i]  = {};
